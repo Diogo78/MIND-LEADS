@@ -77,7 +77,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
 </div>
 <div id="pn" class="hide">
 <div class="bar"><div class="stat"><b id="ct">0</b> leads</div><div style="flex:1"></div>
-<button class="btn sm ghost" id="ex">Exportar CSV</button><button class="btn sm ghost" id="so">Sair</button></div>
+<button class="btn sm ghost" id="rf">Atualizar</button><button class="btn sm ghost" id="ex">Exportar CSV</button><button class="btn sm ghost" id="so">Sair</button></div>
 <div class="bar"><input id="q" placeholder="Buscar por nome, e-mail, Instagram ou WhatsApp"></div>
 <div class="tw"><table><thead><tr><th>Data</th><th>Nome</th><th>E-mail</th><th>Instagram</th><th>WhatsApp</th><th>Origem</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
 <p class="stat" id="src"></p>
@@ -86,7 +86,14 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
 </div>
 <script>
 // ====== CONFIGURAÇÃO ======
-var ADMIN_PASSWORD = "mind0778@"; // TROQUE a senha aqui
+var USE_API = true; // true = usa o backend do Cloudflare (/api/leads)
+var SB_URL="https://weigoiadhzhcrffkagiw.supabase.co";      // ex: https://abcdxyz.supabase.co
+var SB_KEY="sb_publishable_2ZGP1YeuHNPE27cVTMnfDg_fnHp5jhW";         // chave "anon public"
+var ADMIN_EMAIL="admin@mind.com";          // e-mail do usuário admin criado no Supabase
+function hd(){var o={apikey:SB_KEY};if(sg("tk"))o.Authorization="Bearer "+sg("tk");return o}
+async function tok(body,gt){try{var r=await fetch(SB_URL+"/auth/v1/token?grant_type="+gt,{method:"POST",headers:{apikey:SB_KEY,"content-type":"application/json"},body:JSON.stringify(body)});if(!r.ok)return false;var d=await r.json();ss("tk",d.access_token);ss("rt",d.refresh_token);return true}catch(e){return false}}
+function chk(p){return tok({email:ADMIN_EMAIL,password:p},"password")}
+function refresh(){var t=sg("rt");return t?tok({refresh_token:t},"refresh_token"):Promise.resolve(false)}
 // ==========================
 var $=function(i){return document.getElementById(i)};
 var db=null, leads=[], authed=false, LS="leads_v1";
@@ -102,11 +109,12 @@ if(sg("auth")==="1"){authed=true;$("lg").classList.add("hide");$("pn").classList
 if(sg("tab")==="2")show(2);
 (async function(){
   try{ if(window.claude){ db=await window.claude.use("db"); } }catch(e){db=null}
-  $("src").textContent = db ? "Armazenamento: banco de dados compartilhado do app." : "Armazenamento: neste navegador (banco compartilhado indisponível).";
+  $("src").textContent = USE_API ? "Armazenamento: banco de dados Supabase." : db ? "Armazenamento: banco de dados compartilhado do app." : "Armazenamento: neste navegador (banco compartilhado indisponível).";
   if(authed) load();
 })();
 
 async function load(){
+  if(USE_API){try{var r=await fetch(SB_URL+"/rest/v1/leads?select=*&order=ts.desc",{headers:hd(),cache:"no-store"});if(r.status===401&&await refresh()){return load()}if(r.status===401||r.status===403){$("so").click();return}if(r.ok){leads=(await r.json()).map(function(x){x._id=x.id;return x});render()}}catch(e){}return}
   if(db){
     try{
       var s=await db.collection("leads").orderBy("ts","desc").get();
@@ -125,8 +133,11 @@ function render(){
   }).join("")||"<tr><td colspan=7 style='color:#9a9a9a'>Nenhum lead ainda.</td></tr>";
 }
 $("q").oninput=render;
+$("rf").onclick=load;
+setInterval(function(){if(authed&&!$("ad").classList.contains("hide"))load()},8000);
 $("tb").onclick=async function(e){
   var id=e.target.getAttribute&&e.target.getAttribute("data-id"); if(!id||!confirm("Excluir este lead?"))return;
+  if(USE_API){try{await fetch(SB_URL+"/rest/v1/leads?id=eq."+encodeURIComponent(id),{method:"DELETE",headers:hd()})}catch(x){}load();return}
   try{ if(db) await db.collection("leads").doc(id).delete(); }catch(x){}
   lsSet(lsGet().filter(function(y){return String(y.ts)!==id}));
   load();
@@ -137,18 +148,20 @@ $("sb").onclick=async function(){
   if(!nome||!/^\S+@\S+\.\S+$/.test(email)||!/^[A-Za-z0-9._]{1,30}$/.test(ig)||wa.replace(/\D/g,"").length<10){$("er").textContent="Preencha nome, e-mail, Instagram (@) e WhatsApp com DDD.";return}
   $("er").textContent="";$("sb").disabled=true;
   var lead={nome:nome,email:email,whatsapp:wa,instagram:"@"+ig,origem:$("o").value,ts:Date.now()};
+  if(USE_API){try{var rs=await fetch(SB_URL+"/rest/v1/leads",{method:"POST",headers:{apikey:SB_KEY,"content-type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(lead)});if(!rs.ok)throw 0}catch(e){$("er").textContent="Não foi possível enviar. Tente novamente.";$("sb").disabled=false;return}$("f").classList.add("hide");$("ok").classList.remove("hide");return}
   var saved=false;
   if(db){try{await db.collection("leads").add(lead);saved=true}catch(e){}}
   if(!saved){var a=lsGet();a.push(lead);lsSet(a)}
   $("f").classList.add("hide");$("ok").classList.remove("hide");
 };
 
-$("lb").onclick=function(){
-  if($("pw").value===ADMIN_PASSWORD){authed=true;ss("auth","1");$("lg").classList.add("hide");$("pn").classList.remove("hide");$("le").textContent="";$("pw").value="";load()}
+$("lb").onclick=async function(){
+  var okp=USE_API?await chk($("pw").value):$("pw").value===ADMIN_PASSWORD;
+  if(okp){authed=true;ss("auth","1");$("lg").classList.add("hide");$("pn").classList.remove("hide");$("le").textContent="";$("pw").value="";load()}
   else $("le").textContent="Senha incorreta.";
 };
 $("pw").onkeydown=function(e){if(e.key==="Enter")$("lb").click()};
-$("so").onclick=function(){authed=false;ss("auth",null);$("pn").classList.add("hide");$("lg").classList.remove("hide")};
+$("so").onclick=function(){authed=false;ss("auth",null);ss("tk",null);ss("rt",null);$("pn").classList.add("hide");$("lg").classList.remove("hide")};
 
 $("ex").onclick=async function(){
   var rows=[["Data","Nome","E-mail","Instagram","WhatsApp","Origem"]].concat(leads.map(function(x){return[new Date(x.ts).toLocaleString("pt-BR"),x.nome,x.email,x.instagram,x.whatsapp,x.origem]}));
