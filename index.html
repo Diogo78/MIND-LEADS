@@ -93,9 +93,13 @@ var db=null, leads=[], authed=false, LS="leads_v1";
 function lsGet(){try{return JSON.parse(localStorage.getItem(LS)||"[]")}catch(e){return[]}}
 function lsSet(a){try{localStorage.setItem(LS,JSON.stringify(a))}catch(e){}}
 function esc(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML}
-function show(t){$("pg").classList.toggle("hide",t!=1);$("ad").classList.toggle("hide",t!=2);$("t1").classList.toggle("on",t==1);$("t2").classList.toggle("on",t==2)}
+function ss(k,v){try{if(v==null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){}}
+function sg(k){try{return sessionStorage.getItem(k)}catch(e){return null}}
+function show(t){ss("tab",t);$("pg").classList.toggle("hide",t!=1);$("ad").classList.toggle("hide",t!=2);$("t1").classList.toggle("on",t==1);$("t2").classList.toggle("on",t==2)}
 $("t1").onclick=function(){show(1)};$("t2").onclick=function(){show(2)};
 
+if(sg("auth")==="1"){authed=true;$("lg").classList.add("hide");$("pn").classList.remove("hide")}
+if(sg("tab")==="2")show(2);
 (async function(){
   try{ if(window.claude){ db=await window.claude.use("db"); } }catch(e){db=null}
   $("src").textContent = db ? "Armazenamento: banco de dados compartilhado do app." : "Armazenamento: neste navegador (banco compartilhado indisponível).";
@@ -140,11 +144,11 @@ $("sb").onclick=async function(){
 };
 
 $("lb").onclick=function(){
-  if($("pw").value===ADMIN_PASSWORD){authed=true;$("lg").classList.add("hide");$("pn").classList.remove("hide");$("le").textContent="";$("pw").value="";load()}
+  if($("pw").value===ADMIN_PASSWORD){authed=true;ss("auth","1");$("lg").classList.add("hide");$("pn").classList.remove("hide");$("le").textContent="";$("pw").value="";load()}
   else $("le").textContent="Senha incorreta.";
 };
 $("pw").onkeydown=function(e){if(e.key==="Enter")$("lb").click()};
-$("so").onclick=function(){authed=false;$("pn").classList.add("hide");$("lg").classList.remove("hide")};
+$("so").onclick=function(){authed=false;ss("auth",null);$("pn").classList.add("hide");$("lg").classList.remove("hide")};
 
 $("ex").onclick=async function(){
   var rows=[["Data","Nome","E-mail","Instagram","WhatsApp","Origem"]].concat(leads.map(function(x){return[new Date(x.ts).toLocaleString("pt-BR"),x.nome,x.email,x.instagram,x.whatsapp,x.origem]}));
