@@ -148,7 +148,7 @@ $("sb").onclick=async function(){
   if(!nome||!/^\S+@\S+\.\S+$/.test(email)||!/^[A-Za-z0-9._]{1,30}$/.test(ig)||wa.replace(/\D/g,"").length<10){$("er").textContent="Preencha nome, e-mail, Instagram (@) e WhatsApp com DDD.";return}
   $("er").textContent="";$("sb").disabled=true;
   var lead={nome:nome,email:email,whatsapp:wa,instagram:"@"+ig,origem:$("o").value,ts:Date.now()};
-  if(USE_API){try{var rs=await fetch(SB_URL+"/rest/v1/leads",{method:"POST",headers:{apikey:SB_KEY,"content-type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(lead)});if(!rs.ok)throw 0}catch(e){$("er").textContent="Não foi possível enviar. Tente novamente.";$("sb").disabled=false;return}$("f").classList.add("hide");$("ok").classList.remove("hide");return}
+  if(USE_API){try{var rs=await fetch(SB_URL+"/rest/v1/leads",{method:"POST",headers:{apikey:SB_KEY,"content-type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(lead)});if(!rs.ok){var tx="";try{tx=await rs.text()}catch(_){}throw new Error(rs.status+" "+tx.slice(0,200))}}catch(e){$("er").textContent="Não foi possível enviar. Tente novamente. ["+((e&&e.message)||e)+"]";$("sb").disabled=false;return}$("f").classList.add("hide");$("ok").classList.remove("hide");return}
   var saved=false;
   if(db){try{await db.collection("leads").add(lead);saved=true}catch(e){}}
   if(!saved){var a=lsGet();a.push(lead);lsSet(a)}
