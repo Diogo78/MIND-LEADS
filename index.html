@@ -3,6 +3,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0a">
 <title>MIND – Entretenimento e Eventos</title>
+<meta property="og:title" content="MIND – Entretenimento e Eventos"><meta property="og:description" content="Roadie, backstage, artistas e produção de eventos em Minas Gerais. Peça seu orçamento."><meta property="og:type" content="website"><meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="favicon.png"><link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:image" content="https://mind-leads.contato-agenciacollab.workers.dev/og.png"><meta property="og:url" content="https://mind-leads.contato-agenciacollab.workers.dev/"><meta name="twitter:image" content="https://mind-leads.contato-agenciacollab.workers.dev/og.png">
 <meta name="description" content="MIND: roadie, backstage, artistas e produção de eventos em Minas Gerais.">
 <style>
 :root{--neon:#f7fa00;--bg:#0a0a0a;--card:#141414;--tx:#f5f5f5;--mut:#9a9a9a;--bd:#2a2a2a;--ink:#0a0a0a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -72,6 +75,20 @@ td button,.del{text-shadow:none;background:none;border:0;color:#ff6b6b;cursor:po
 .svcc b{display:block;color:var(--neon);font-size:17px;margin-bottom:6px}
 .svcc p{margin:0;color:var(--mut);font-size:14px}
 .about{max-width:640px;margin:0 auto;text-align:center;color:var(--mut);padding:10px 0 4px}
+.wa{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;background:#25d366;color:#04210f;border-radius:99px;padding:13px 18px;font-weight:800;text-decoration:none;box-shadow:0 4px 20px rgba(0,0,0,.5)}
+.gal{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;padding:14px 0}
+.gal>*{aspect-ratio:4/3;width:100%;object-fit:cover;border-radius:14px;border:1px solid var(--bd);background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--mut);font-size:13px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:13px;color:var(--mut)}.chk input{width:20px;height:20px;margin-top:2px;flex-shrink:0}.chk a{color:var(--neon);cursor:pointer;text-decoration:underline}
+.hp{position:absolute;left:-9999px;opacity:0}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:30;overflow:auto;padding:20px}.ov .card{max-width:560px}.ov p{font-size:14px;color:var(--mut)}
+.ev{flex-wrap:wrap}
+.faq details{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.faq summary{cursor:pointer;font-weight:700;min-height:24px}.faq details[open] summary{color:var(--neon)}
+.faq p{color:var(--mut);margin:10px 0 0;font-size:14px}
+.ft{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:22px;text-align:left;padding:30px 0 20px;border-top:1px solid var(--bd);margin-bottom:14px}
+.ft b{color:var(--neon);display:block;margin-bottom:8px;font-size:14px}
+.ft a,.ft span{display:block;color:var(--mut);text-decoration:none;padding:4px 0;font-size:14px;cursor:pointer}
+.ck{position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:25;max-width:560px;margin:0 auto;background:var(--card);border:1px solid var(--neon);border-radius:16px;padding:14px 16px;font-size:13px;color:var(--tx);box-shadow:0 6px 30px rgba(0,0,0,.7)}.ck div{display:flex;gap:8px;margin-top:10px}.ck .btn{margin:0;flex:1}
 footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
 @media(max-width:640px){
  .svc{grid-template-columns:1fr}
@@ -102,10 +119,10 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
 <div class="hero">
 <h1>Os bastidores que <span>fazem o show acontecer</span></h1>
 <p class="sub">A MIND é entretenimento e suporte para festas e eventos em Minas Gerais: da estrutura dos bastidores aos artistas no palco.</p>
-<button class="btn cta" id="go" type="button">QUERO PARTICIPAR</button>
+<button class="btn cta" id="go" type="button">PEDIR ORÇAMENTO</button><button class="btn cta ghost" id="go2" type="button" style="margin-top:10px">ENTRAR NA LISTA</button>
 </div>
 
-<h2 class="sec">Nossos <span>serviços</span></h2>
+<h2 class="sec" id="svc">Nossos <span>serviços</span></h2>
 <div class="svc">
 <div class="svcc"><i>🎛️</i><b>Roadie</b><p>Montagem, operação e cuidado com o equipamento antes, durante e depois do show.</p></div>
 <div class="svcc"><i>🎤</i><b>Backstage</b><p>Camarim e apoio aos artistas e equipes, para tudo fluir nos bastidores.</p></div>
@@ -115,6 +132,34 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
 <div class="svcc"><i>🎬</i><b>Produções</b><p>Projetos e produções com a identidade e o padrão MIND.</p></div>
 </div>
 
+<h2 class="sec">Nossos <span>eventos</span></h2><div class="gal" id="gal"></div>
+<div id="dep" class="hide"><h2 class="sec">O que dizem <span>da MIND</span></h2><div class="list" id="depl" style="padding:14px 0"></div></div>
+<div id="par" class="hide"><h2 class="sec">Nossos <span>parceiros</span></h2><div class="gal" id="parl"></div></div>
+<div id="pro" class="hide"><h2 class="sec">Próximos <span>eventos</span></h2><div class="list" id="prol" style="padding:14px 0"></div></div>
+<div class="faq" id="faq" style="padding:10px 0"><h2 class="sec">Perguntas <span>frequentes</span></h2><div style="padding-top:14px">
+<details><summary>Quais serviços a MIND oferece?</summary><p>Roadie, backstage, suporte ao evento, artistas, organização de eventos e produções. Você pode contratar um serviço isolado ou o evento completo.</p></details>
+<details><summary>Atendem a minha cidade?</summary><p>Atuamos em Minas Gerais e região. Informe a cidade no pedido de orçamento e confirmamos a disponibilidade.</p></details>
+<details><summary>Como funciona o orçamento?</summary><p>Você preenche o formulário com os dados do evento e a gente responde pelo WhatsApp com a proposta. O pedido não tem compromisso.</p></details>
+<details><summary>Com quanta antecedência devo contratar?</summary><p>Quanto antes, melhor, para garantir a data e a equipe. Se o seu evento está próximo, envie o pedido mesmo assim que verificamos o que é possível.</p></details>
+<details><summary>Posso contratar só um serviço, como roadie ou backstage?</summary><p>Pode sim. Escolha o serviço desejado no formulário e descreva o que precisa nos detalhes.</p></details>
+<details><summary>Como funciona o pagamento?</summary><p>Valores e condições são combinados no orçamento, de acordo com o tamanho e o tipo do evento.</p></details>
+</div></div>
+<div class="hero" id="orc" style="padding-top:34px"><h2 class="sec">Peça seu <span>orçamento</span></h2>
+<p class="sub">Conte sobre o seu evento e a gente responde pelo WhatsApp.</p>
+<div class="card"><form id="fo2">
+<input class="hp" id="hp1" tabindex="-1" autocomplete="off" aria-hidden="true">
+<label for="on">Nome</label><input id="on" maxlength="80" autocomplete="name" required>
+<label for="ow">WhatsApp</label><input id="ow" type="tel" placeholder="(11) 99999-9999" autocomplete="tel" required>
+<label for="ot">Tipo de evento</label><select id="ot"><option>Festa</option><option>Show / Festival</option><option>Casamento</option><option>Corporativo</option><option>Outro</option></select>
+<label for="os">Serviço</label><select id="os"><option>Roadie</option><option>Backstage</option><option>Suporte ao evento</option><option>Artistas</option><option>Evento completo</option><option>Outro</option></select>
+<label for="od">Data do evento</label><input id="od" type="date">
+<label for="oc">Cidade</label><input id="oc" maxlength="80" required>
+<label for="op">Nº de pessoas (aprox.)</label><input id="op" type="number" min="1" inputmode="numeric">
+<label for="ox">Detalhes</label><textarea id="ox" maxlength="500" placeholder="Conte o que você precisa"></textarea>
+<label class="chk"><input type="checkbox" id="oa" required><span>Concordo em ser contatado e com a <a class="pvl">Política de Privacidade</a>.</span></label>
+<button class="btn" id="ob" type="submit">ENVIAR PEDIDO</button><div class="err" id="oe2"></div></form>
+<div class="ok hide" id="oo">✓ Pedido recebido! Falamos com você em breve.<br><a class="btn sm ghost wal" style="display:inline-block;margin-top:12px;text-decoration:none">Falar agora no WhatsApp</a></div>
+</div></div>
 <div class="hero" id="cad" style="padding-top:34px">
 <h2 class="sec">Entre na <span>lista de acesso antecipado</span></h2>
 <p class="sub">Cadastre-se e fique por dentro das novidades e dos próximos eventos. Sem spam, só o que importa.</p>
@@ -126,6 +171,8 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
 <label for="ig">Instagram</label><input id="ig" placeholder="@seuinstagram" autocapitalize="none" autocorrect="off" required>
 <label for="o">Como nos conheceu?</label>
 <select id="o"><option>Instagram</option><option>Indicação</option><option>Google</option><option>Outro</option></select>
+<input class="hp" id="hp2" tabindex="-1" autocomplete="off" aria-hidden="true">
+<label class="chk"><input type="checkbox" id="la" required><span>Concordo em receber contato da MIND e com a <a class="pvl">Política de Privacidade</a>.</span></label>
 <button class="btn" id="sb" type="submit">QUERO PARTICIPAR</button>
 <div class="err" id="er"></div>
 </form>
@@ -149,6 +196,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
 <button type="button" data-v="1" aria-label="1 estrela">★</button><button type="button" data-v="2" aria-label="2 estrelas">★</button><button type="button" data-v="3" aria-label="3 estrelas">★</button><button type="button" data-v="4" aria-label="4 estrelas">★</button><button type="button" data-v="5" aria-label="5 estrelas">★</button>
 </div>
 <label for="ft">Seu feedback</label><textarea id="ft" maxlength="500" placeholder="Escreva aqui o que você achou..." required></textarea>
+<input class="hp" id="hp3" tabindex="-1" autocomplete="off" aria-hidden="true">
 <button class="btn" id="fs" type="submit">ENVIAR FEEDBACK</button>
 <div class="err" id="fe"></div>
 </form>
@@ -162,7 +210,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
 <button class="btn" id="lb" type="button">ENTRAR</button><div class="err" id="le"></div>
 </div>
 <div id="pn" class="hide">
-<div class="bar"><div class="subtabs"><button id="s1" class="on">Leads</button><button id="s2">Eventos</button><button id="s3">Feedbacks</button></div><div style="flex:1"></div><button class="btn sm ghost" id="so">Sair</button></div>
+<div class="bar"><div class="subtabs"><button id="s1" class="on">Leads</button><button id="s2">Eventos</button><button id="s3">Feedbacks</button><button id="s4">Orçamentos</button></div><div style="flex:1"></div><button class="btn sm ghost" id="so">Sair</button></div>
 
 <div id="pl">
 <div class="bar"><div class="stat"><b id="ct">0</b> leads</div><div style="flex:1"></div>
@@ -179,22 +227,38 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
 <ul class="list" id="el"></ul>
 </div>
 
+<div id="pq" class="hide"><div class="bar"><div class="stat"><b id="oc2">0</b> pedidos</div></div><div class="err" id="oe"></div><div class="list" id="ol"></div></div>
 <div id="pf" class="hide">
 <div class="bar"><div class="stat">Média <b id="fa">–</b> <span class="st5" id="fas"></span> &nbsp;·&nbsp; <b id="fc2">0</b> feedbacks</div></div>
 <div class="err" id="fer"></div>
 <div class="list" id="fl"></div>
 </div>
 </div></section>
-<footer>© 2026 MIND. Todos os direitos reservados.</footer>
+<div class="ck hide" id="ck"><span>Usamos cookies de medição (Meta e Google) para melhorar o site e nossos anúncios. <a class="pvl" style="color:var(--neon);cursor:pointer;text-decoration:underline">Saiba mais</a></span><div><button class="btn sm ghost" id="ckn" type="button">Recusar</button><button class="btn sm" id="cky" type="button">Aceitar</button></div></div>
+<div class="ov hide" id="pv"><div class="card"><h3 style="margin:0 0 8px;color:var(--neon)">Política de Privacidade</h3>
+<p><b>Quem somos:</b> MIND Entretenimento (Instagram @mindentretenimento). <b>Dados coletados:</b> nome, e-mail, WhatsApp, Instagram e as informações do seu pedido de orçamento ou feedback.</p>
+<p><b>Para que usamos:</b> responder orçamentos, enviar novidades e eventos da MIND e melhorar nossos serviços. Não vendemos seus dados.</p>
+<p><b>Onde ficam:</b> em banco de dados seguro (Supabase), acessível apenas à equipe da MIND. <b>Seus direitos (LGPD):</b> pedir acesso, correção ou exclusão dos seus dados e cancelar o contato a qualquer momento, falando conosco pelo Instagram ou WhatsApp.</p>
+<p><b>Cookies:</b> se você aceitar, usamos cookies de medição (Meta e Google) para entender o uso do site e melhorar nossos anúncios. Você pode recusar.</p>
+<button class="btn" id="pvx" type="button">FECHAR</button></div></div>
+<a class="wa hide" id="wab" target="_blank" rel="noopener">💬 WhatsApp</a>
+<footer><div class="ft" id="ftr"></div>© 2026 MIND. Todos os direitos reservados.</footer>
 </div>
 <script>
 // ====== CONFIGURAÇÃO ======
 var SB_URL="https://weigoiadhzhcrffkagiw.supabase.co";
 var SB_KEY="sb_publishable_2ZGP1YeuHNPE27cVTMnfDg_fnHp5jhW";
 var ADMIN_EMAIL="admin@mind.com"; // a senha é definida no Supabase (Authentication > Users)
+var WHATSAPP=""; // ex: "5534999999999" (55 + DDD + número). Vazio = botão oculto
+var PORTFOLIO=[]; // ex: [{src:"fotos/evento1.jpg",t:"Nome do evento"}]
+var META_PIXEL=""; // ID do Pixel do Meta (opcional)
+var GA_ID=""; // ex: "G-XXXXXXXXXX" (Google Analytics, opcional)
+var EMAIL=""; // e-mail de contato (opcional)
+var CIDADE="Minas Gerais e região";
+var PARCEIROS=[]; // ex: [{src:"fotos/parceiro1.png",t:"Parceiro"}]
 // ==========================
 var $=function(i){return document.getElementById(i)};
-var leads=[],events=[],feeds=[],authed=false,sub=1,nota=0;
+var openEv=null,tipoL="cortesia",listas=[],orcs=[],leads=[],events=[],feeds=[],authed=false,sub=1,nota=0;
 function esc(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML}
 function ss(k,v){try{if(v==null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){}}
 function sg(k){try{return sessionStorage.getItem(k)}catch(e){return null}}
@@ -218,9 +282,29 @@ async function req(path,opt){
 }
 // envio público (visitante): só a chave anônima, sem token de admin
 async function pub(table,row){
-  var r=await fetch(SB_URL+"/rest/v1/"+table,{method:"POST",headers:{apikey:SB_KEY,"content-type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(row)});
+  async function go(b){return fetch(SB_URL+"/rest/v1/"+table,{method:"POST",headers:{apikey:SB_KEY,"content-type":"application/json",Prefer:"return=minimal"},body:JSON.stringify(b)})}
+  var r=await go(row);
+  if(!r.ok&&row.consentimento!==undefined&&!/duplicado/.test(await r.clone().text())){var b2=Object.assign({},row);delete b2.consentimento;r=await go(b2)} // banco sem a coluna nova: reenvia sem ela
   if(!r.ok){var t="";try{t=await r.text()}catch(_){}throw new Error(r.status+" "+t.slice(0,200))}
 }
+var T0=Date.now();
+function guard(){
+  if(Date.now()-T0<3000)return"Aguarde um instante e tente novamente.";
+  try{var a=JSON.parse(localStorage.getItem("mind_sub")||"[]").filter(function(t){return Date.now()-t<3600000});if(a.length>=3)return"Muitos envios em pouco tempo. Tente novamente mais tarde."}catch(e){}
+  return"";
+}
+function emsg(err){return/duplicado/.test(err&&err.message)?"Recebemos seu envio há pouco. Aguarde alguns minutos para enviar de novo.":"Não foi possível enviar. Tente novamente em instantes."}
+function done(fb,ga){
+  try{var a=JSON.parse(localStorage.getItem("mind_sub")||"[]").filter(function(t){return Date.now()-t<3600000});a.push(Date.now());localStorage.setItem("mind_sub",JSON.stringify(a))}catch(e){}
+  try{if(window.fbq&&fb)fbq("track",fb);if(window.gtag&&ga)gtag("event",ga)}catch(e){}
+}
+function loadPix(){
+  if(META_PIXEL&&!window.fbq){!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version="2.0";n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,"script","https://connect.facebook.net/en_US/fbevents.js");fbq("init",META_PIXEL);fbq("track","PageView")}
+  if(GA_ID&&!window.gtag){var g=document.createElement("script");g.async=true;g.src="https://www.googletagmanager.com/gtag/js?id="+encodeURIComponent(GA_ID);document.head.appendChild(g);window.dataLayer=window.dataLayer||[];window.gtag=function(){dataLayer.push(arguments)};gtag("js",new Date());gtag("config",GA_ID)}
+}
+function ckSet(v){try{localStorage.setItem("mind_ck",v)}catch(e){}$("ck").classList.add("hide");if(v==="1")loadPix()}
+if(META_PIXEL||GA_ID){var ck=null;try{ck=localStorage.getItem("mind_ck")}catch(e){}if(ck==="1")loadPix();else if(ck!=="0")$("ck").classList.remove("hide")}
+$("cky").onclick=function(){ckSet("1")};$("ckn").onclick=function(){ckSet("0")};
 
 /* ---------- abas ---------- */
 function show(t){
@@ -230,11 +314,11 @@ function show(t){
 }
 function setSub(s){
   sub=s;
-  ["pl","pe","pf"].forEach(function(id,i){$(id).classList.toggle("hide",s!=i+1);$("s"+(i+1)).classList.toggle("on",s==i+1)});
+  ["pl","pe","pf","pq"].forEach(function(id,i){$(id).classList.toggle("hide",s!=i+1);$("s"+(i+1)).classList.toggle("on",s==i+1)});
   load();
 }
 $("t1").onclick=function(){show(1)};$("t2").onclick=function(){show(2)};$("t3").onclick=function(){show(3)};
-$("s1").onclick=function(){setSub(1)};$("s2").onclick=function(){setSub(2)};$("s3").onclick=function(){setSub(3)};
+$("s1").onclick=function(){setSub(1)};$("s2").onclick=function(){setSub(2)};$("s3").onclick=function(){setSub(3)};$("s4").onclick=function(){setSub(4)};
 $("go").onclick=function(){$("cad").scrollIntoView({behavior:"smooth",block:"start"})};
 show(1); // a primeira tela é sempre o Cadastro
 if(sg("auth")==="1"){authed=true;$("lg").classList.add("hide");$("pn").classList.remove("hide")}
@@ -245,12 +329,14 @@ $("so").onclick=logout;
 /* ---------- cadastro (público) ---------- */
 $("f").onsubmit=async function(e){
   e.preventDefault();
+  if($("hp2").value){$("f").classList.add("hide");$("ok").classList.remove("hide");return}
+  var g=guard();if(g){$("er").textContent=g;return}
   var nome=$("n").value.trim(),email=$("e").value.trim(),wa=$("w").value.trim(),ig=$("ig").value.trim().replace(/^@+/,"").replace(/\s/g,"");
   if(!nome||!/^\S+@\S+\.\S+$/.test(email)||!/^[A-Za-z0-9._]{1,30}$/.test(ig)||wa.replace(/\D/g,"").length<10){$("er").textContent="Preencha nome, e-mail, Instagram (@) e WhatsApp com DDD.";return}
   $("er").textContent="";$("sb").disabled=true;
-  try{await pub("landing_leads",{nome:nome,email:email,whatsapp:wa,instagram:"@"+ig,origem:$("o").value,ts:Date.now()})}
-  catch(err){console.error(err);$("er").textContent="Não foi possível enviar. Tente novamente em instantes.";$("sb").disabled=false;return}
-  $("f").classList.add("hide");$("ok").classList.remove("hide");
+  try{await pub("landing_leads",{nome:nome,email:email,whatsapp:wa,instagram:"@"+ig,origem:$("o").value,consentimento:true,ts:Date.now()})}
+  catch(err){console.error(err);$("er").textContent=emsg(err);$("sb").disabled=false;return}
+  done("Lead","generate_lead");$("f").classList.add("hide");$("ok").classList.remove("hide");
 };
 
 /* ---------- feedback (público) ---------- */
@@ -258,13 +344,15 @@ function paintStars(){var b=$("stars").children;for(var i=0;i<b.length;i++)b[i].
 $("stars").onclick=function(e){var b=e.target.closest&&e.target.closest("button");if(!b)return;nota=Number(b.getAttribute("data-v"));paintStars()};
 $("ff").onsubmit=async function(e){
   e.preventDefault();
+  if($("hp3").value){$("ff").classList.add("hide");$("fo").classList.remove("hide");return}
+  var g=guard();if(g){$("fe").textContent=g;return}
   var txt=$("ft").value.trim();
   if(nota<1||nota>5){$("fe").textContent="Escolha uma nota de 1 a 5 estrelas.";return}
   if(txt.length<3){$("fe").textContent="Escreva seu feedback.";return}
   $("fe").textContent="";$("fs").disabled=true;
   try{await pub("landing_feedbacks",{nome:$("fn").value.trim()||"Anônimo",texto:txt,nota:nota,ts:Date.now()})}
-  catch(err){console.error(err);$("fe").textContent="Não foi possível enviar. Tente novamente em instantes.";$("fs").disabled=false;return}
-  $("ff").classList.add("hide");$("fo").classList.remove("hide");
+  catch(err){console.error(err);$("fe").textContent=emsg(err);$("fs").disabled=false;return}
+  done();$("ff").classList.add("hide");$("fo").classList.remove("hide");
 };
 
 /* ---------- admin: carregar ---------- */
@@ -275,13 +363,14 @@ async function load(){
     var r2=await req("landing_events?select=*&order=feito.asc,ts.desc");
     if(r2&&r2.ok){events=await r2.json();$("ee").textContent="";renderEvents()}
     else if(r2)$("ee").textContent="Não foi possível carregar os eventos. Rode o arquivo supabase-setup.sql no Supabase.";
-  }else{
+  }else if(sub==4){var r4=await req("landing_orcamentos?select=*&order=ts.desc");if(r4&&r4.ok){orcs=await r4.json();$("oe").textContent="";renderOrcs()}else if(r4)$("oe").textContent="Rode o supabase-setup-2.sql no Supabase."}
+  else{
     var r3=await req("landing_feedbacks?select=*&order=ts.desc");
     if(r3&&r3.ok){feeds=await r3.json();$("fer").textContent="";renderFeeds()}
     else if(r3)$("fer").textContent="Não foi possível carregar os feedbacks. Rode o arquivo supabase-setup.sql no Supabase.";
   }
 }
-setInterval(function(){if(authed&&!$("ad").classList.contains("hide"))load()},8000);
+setInterval(function(){if(authed&&!openEv&&!$("ad").classList.contains("hide"))load()},8000);
 $("rf").onclick=load;
 
 /* ---------- admin: leads ---------- */
@@ -312,7 +401,7 @@ function renderEvents(){
   $("ec").textContent=done+" de "+events.length;
   $("el").innerHTML=events.map(function(x){
     var id=esc(x.id);
-    return "<li class='ev"+(x.feito?" done":"")+"'><button class='st' data-a='t' data-id='"+id+"' aria-label='"+(x.feito?"Marcar como não feito":"Marcar como feito")+"'>"+(x.feito?"✅":"☑️")+"</button><div class='et'><b>"+esc(x.titulo)+"</b>"+(x.data_evento?"<small>"+esc(fday(x.data_evento))+"</small>":"")+"</div><button class='del' data-a='d' data-id='"+id+"'>Excluir</button></li>";
+    return "<li class='ev"+(x.feito?" done":"")+"'><button class='st' data-a='t' data-id='"+id+"' aria-label='"+(x.feito?"Marcar como não feito":"Marcar como feito")+"'>"+(x.feito?"✅":"☑️")+"</button><div class='et'><b>"+esc(x.titulo)+"</b>"+(x.data_evento?"<small>"+esc(fday(x.data_evento))+"</small>":"")+"</div><button class='del' data-a='p' data-id='"+id+"' style='color:var(--neon)'>"+(x.publico?"Ocultar do site":"Mostrar no site")+"</button><button class='del' data-a='xo' data-id='"+id+"' style='color:var(--neon)'>"+(openEv===String(x.id)?"Fechar listas":"📋 Listas")+"</button><button class='del' data-a='d' data-id='"+id+"'>Excluir</button>"+(openEv===String(x.id)?panel(x):"")+"</li>";
   }).join("")||"<li class='stat'>Nenhum evento ainda. Adicione o primeiro acima.</li>";
 }
 $("ef").onsubmit=async function(e){
@@ -322,6 +411,8 @@ $("ef").onsubmit=async function(e){
   if(r&&r.ok){$("et").value="";$("ed").value="";$("ee").textContent="";load()}else if(r)$("ee").textContent="Não foi possível salvar o evento."
 };
 $("el").onclick=async function(e){
+  var xb=e.target.closest&&e.target.closest("button[data-a^=x]");if(xb){return listAct(xb.getAttribute("data-a"),xb.getAttribute("data-id"),xb)}
+
   var b=e.target.closest&&e.target.closest("button");if(!b)return;
   var id=b.getAttribute("data-id"),a=b.getAttribute("data-a");if(!id)return;
   if(a==="t"){
@@ -329,7 +420,7 @@ $("el").onclick=async function(e){
     ev.feito=!ev.feito;renderEvents(); // atualiza na hora
     await req("landing_events?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({feito:ev.feito})});
     load();
-  }else if(a==="d"&&confirm("Excluir este evento?")){
+  }else if(a==="p"){var e2=events.filter(function(x){return String(x.id)===id})[0];await req("landing_events?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({publico:!(e2&&e2.publico)})});load()}else if(a==="d"&&confirm("Excluir este evento?")){
     await req("landing_events?id=eq."+encodeURIComponent(id),{method:"DELETE"});load();
   }
 };
@@ -340,11 +431,13 @@ function renderFeeds(){
   var avg=feeds.length?feeds.reduce(function(s,x){return s+Number(x.nota||0)},0)/feeds.length:0;
   $("fa").textContent=feeds.length?avg.toFixed(1):"–";$("fas").textContent=feeds.length?stars(avg):"";
   $("fl").innerHTML=feeds.map(function(x){
-    return "<div class='fcard'><div class='top'><b>"+esc(x.nome||"Anônimo")+"</b><span class='st5' aria-label='Nota "+esc(x.nota)+" de 5'>"+stars(x.nota)+"</span></div><p>"+esc(x.texto)+"</p><small>"+esc(fdt(x.ts))+"</small> <button class='del' data-id='"+esc(x.id)+"'>Excluir</button></div>";
+    return "<div class='fcard'><div class='top'><b>"+esc(x.nome||"Anônimo")+"</b><span class='st5' aria-label='Nota "+esc(x.nota)+" de 5'>"+stars(x.nota)+"</span></div><p>"+esc(x.texto)+"</p><small>"+esc(fdt(x.ts))+"</small> <button class='del' data-a='p' data-id='"+esc(x.id)+"' style='color:var(--neon)'>"+(x.publicado?"Ocultar do site":"Mostrar no site")+"</button> <button class='del' data-id='"+esc(x.id)+"'>Excluir</button></div>";
   }).join("")||"<div class='stat'>Nenhum feedback ainda.</div>";
 }
 $("fl").onclick=async function(e){
-  var id=e.target.getAttribute&&e.target.getAttribute("data-id");if(!id||!confirm("Excluir este feedback?"))return;
+  var id=e.target.getAttribute&&e.target.getAttribute("data-id");if(!id)return;
+  if(e.target.getAttribute("data-a")==="p"){var f=feeds.filter(function(x){return String(x.id)===id})[0];await req("landing_feedbacks?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({publicado:!(f&&f.publicado)})});load();return}
+  if(!confirm("Excluir este feedback?"))return;
   await req("landing_feedbacks?id=eq."+encodeURIComponent(id),{method:"DELETE"});load();
 };
 
@@ -355,4 +448,96 @@ $("lb").onclick=async function(){
   else $("le").textContent="Senha incorreta.";
 };
 $("pw").onkeydown=function(e){if(e.key==="Enter")$("lb").click()};
+
+/* ---------- orçamento, portfólio, depoimentos, WhatsApp, política ---------- */
+function waLink(m){return"https://wa.me/"+WHATSAPP+"?text="+encodeURIComponent(m||"Olá! Vim pelo site da MIND e quero um orçamento.")}
+if(WHATSAPP){$("wab").onclick=function(){try{if(window.fbq)fbq("track","Contact");if(window.gtag)gtag("event","whatsapp_click")}catch(e){}};$("wab").href=waLink();$("wab").classList.remove("hide")}
+$("go").onclick=function(){$("orc").scrollIntoView({behavior:"smooth",block:"start"})};
+$("go2").onclick=function(){$("cad").scrollIntoView({behavior:"smooth",block:"start"})};
+$("gal").innerHTML=(PORTFOLIO.length?PORTFOLIO:[1,2,3,4,5,6]).map(function(x){return x.src?"<img loading='lazy' src='"+esc(x.src)+"' alt='"+esc(x.t||"Evento MIND")+"'>":"<div>🎪 Em breve</div>"}).join("");
+if(PARCEIROS.length){$("par").classList.remove("hide");$("parl").innerHTML=PARCEIROS.map(function(x){return"<img loading='lazy' src='"+esc(x.src)+"' alt='"+esc(x.t||"Parceiro")+"'>"}).join("")}
+(async function(){try{var r=await fetch(SB_URL+"/rest/v1/landing_feedbacks?select=nome,texto,nota&publicado=eq.true&nota=gte.4&order=ts.desc&limit=6",{headers:{apikey:SB_KEY}});if(!r.ok)return;var d=await r.json();if(!d.length)return;$("dep").classList.remove("hide");$("depl").innerHTML=d.map(function(x){return"<div class='fcard'><div class='top'><b>"+esc(x.nome)+"</b><span class='st5'>"+stars(x.nota)+"</span></div><p>"+esc(x.texto)+"</p></div>"}).join("")}catch(e){}})();
+$("fo2").onsubmit=async function(e){
+  e.preventDefault();
+  if($("hp1").value){$("fo2").classList.add("hide");$("oo").classList.remove("hide");return}
+  var g=guard();if(g){$("oe2").textContent=g;return}
+  var w=$("ow").value.trim();if(w.replace(/\D/g,"").length<10){$("oe2").textContent="Informe o WhatsApp com DDD.";return}
+  $("oe2").textContent="";$("ob").disabled=true;
+  var row={nome:$("on").value.trim(),whatsapp:w,tipo:$("ot").value,servico:$("os").value,data_evento:$("od").value||null,cidade:$("oc").value.trim(),pessoas:Number($("op").value)||null,detalhes:$("ox").value.trim(),consentimento:true,ts:Date.now()};
+  try{await pub("landing_orcamentos",row)}catch(err){console.error(err);$("oe2").textContent=emsg(err);$("ob").disabled=false;return}
+  done("Contact","generate_lead");$("fo2").classList.add("hide");$("oo").classList.remove("hide");
+  var a=document.querySelector(".wal");if(WHATSAPP){a.href=waLink("Olá! Sou "+row.nome+" e acabei de pedir um orçamento de "+row.servico+" para "+row.tipo+" em "+row.cidade+".");a.target="_blank"}else a.classList.add("hide");
+};
+function renderOrcs(){
+  $("oc2").textContent=orcs.length;
+  $("ol").innerHTML=orcs.map(function(x){var id=esc(x.id),n=String(x.whatsapp||"").replace(/\D/g,"");
+    return"<div class='ev"+(x.atendido?" done":"")+"'><button class='st' data-a='t' data-id='"+id+"' aria-label='Alternar atendido'>"+(x.atendido?"✅":"☑️")+"</button><div class='et'><b>"+esc(x.nome)+" · "+esc(x.servico)+"</b><small>"+esc(x.tipo)+" · "+esc(x.cidade)+(x.data_evento?" · "+esc(fday(x.data_evento)):"")+(x.pessoas?" · "+esc(x.pessoas)+" pessoas":"")+"<br>"+esc(x.detalhes||"")+"<br><a style='color:var(--neon)' target='_blank' rel='noopener' href='https://wa.me/"+(n.length<=11?"55":"")+n+"'>"+esc(x.whatsapp)+"</a> · "+esc(fdt(x.ts))+"</small></div><button class='del' data-a='d' data-id='"+id+"'>Excluir</button></div>"}).join("")||"<div class='stat'>Nenhum pedido ainda.</div>";
+}
+$("ol").onclick=async function(e){
+  var b=e.target.closest&&e.target.closest("button");if(!b)return;var id=b.getAttribute("data-id"),a=b.getAttribute("data-a");if(!id)return;
+  if(a==="t"){var o=orcs.filter(function(x){return String(x.id)===id})[0];if(!o)return;o.atendido=!o.atendido;renderOrcs();await req("landing_orcamentos?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({atendido:o.atendido})});load()}
+  else if(a==="d"&&confirm("Excluir este pedido?")){await req("landing_orcamentos?id=eq."+encodeURIComponent(id),{method:"DELETE"});load()}
+};
+document.querySelectorAll(".pvl").forEach(function(a){a.onclick=function(){$("pv").classList.remove("hide")}});
+$("pvx").onclick=function(){$("pv").classList.add("hide")};
+
+/* ---------- próximos eventos e rodapé ---------- */
+(async function(){try{var r=await fetch(SB_URL+"/rest/v1/landing_events?select=titulo,data_evento&publico=eq.true&feito=eq.false&order=data_evento.asc.nullslast",{headers:{apikey:SB_KEY}});if(!r.ok)return;var d=await r.json();if(!d.length)return;$("pro").classList.remove("hide");$("prol").innerHTML=d.map(function(x){return"<div class='fcard'><div class='top'><b>"+esc(x.titulo)+"</b>"+(x.data_evento?"<span class='st5' style='letter-spacing:0'>📅 "+esc(fday(x.data_evento))+"</span>":"")+"</div></div>"}).join("")}catch(e){}})();
+$("ftr").innerHTML="<div><b>MIND</b><span>Entretenimento, roadie, backstage e produção de eventos.</span></div>"
+ +"<div><b>Contato</b><a href='https://instagram.com/mindentretenimento' target='_blank' rel='noopener'>📸 @mindentretenimento</a>"+(WHATSAPP?"<a href='"+waLink()+"' target='_blank' rel='noopener'>💬 WhatsApp</a>":"")+(EMAIL?"<a href='mailto:"+esc(EMAIL)+"'>✉️ "+esc(EMAIL)+"</a>":"")+"</div>"
+ +"<div><b>Atuação</b><span>📍 "+esc(CIDADE)+"</span></div>"
+ +"<div><b>Navegue</b><a data-go='svc'>Serviços</a><a data-go='gal'>Eventos</a><a data-go='faq'>Perguntas frequentes</a><a data-go='orc'>Orçamento</a><a data-go='cad'>Lista de acesso</a><a class='pvl'>Política de Privacidade</a></div>";
+document.querySelectorAll("[data-go]").forEach(function(a){a.onclick=function(){show(1);var id=a.getAttribute("data-go");setTimeout(function(){$(id).scrollIntoView({behavior:"smooth",block:"start"})},60)}});
+document.querySelectorAll(".pvl").forEach(function(a){a.onclick=function(){$("pv").classList.remove("hide")}});
+
+/* ---------- listas por evento (cortesias / patrocinadores) -> WhatsApp ---------- */
+function panel(x){
+  var it=listas.filter(function(l){return l.tipo===tipoL}),id=esc(x.id);
+  return"<div class='lp' style='flex-basis:100%;width:100%;border-top:1px solid var(--bd);padding-top:10px'>"
+  +"<div class='subtabs' style='margin:0 0 10px'><button data-a='xt' data-v='cortesia' data-id='"+id+"' class='"+(tipoL==="cortesia"?"on":"")+"'>Cortesias</button><button data-a='xt' data-v='patrocinador' data-id='"+id+"' class='"+(tipoL==="patrocinador"?"on":"")+"'>Patrocinadores</button></div>"
+  +"<div class='bar' style='margin:0 0 10px'><input id='ln' placeholder='Nome' maxlength='120'><input id='lo' placeholder='Obs (ex: +1, telefone)' maxlength='200'><button class='btn sm' data-a='xa' data-id='"+id+"'>Adicionar</button></div>"
+  +(it.map(function(l,i){return"<div class='stat' style='display:flex;gap:8px;align-items:center;padding:3px 0'><span style='flex:1;min-width:0;overflow-wrap:anywhere;color:var(--tx)'>"+(i+1)+". "+esc(l.nome)+(l.obs?" – "+esc(l.obs):"")+"</span><button class='del' data-a='xd' data-id='"+esc(l.id)+"'>✕</button></div>"}).join("")||"<div class='stat'>Lista vazia.</div>")
+  +"<div class='bar' style='margin:12px 0 0'><button class='btn sm' data-a='xs' data-id='"+id+"'>📲 Enviar para meu WhatsApp</button><button class='btn sm ghost' data-a='xc' data-id='"+id+"'>↗ Escolher contato</button><button class='btn sm ghost' data-a='xp' data-id='"+id+"'>📋 Copiar</button><button class='del' data-a='xn' data-id='"+id+"'>Alterar meu número</button></div></div>";
+}
+async function loadListas(id){
+  var r=await req("landing_listas?select=*&evento_id=eq."+encodeURIComponent(id)+"&order=ts.asc");
+  if(r&&r.ok){listas=await r.json();$("ee").textContent=""}else if(r)$("ee").textContent="Rode o supabase-setup-5.sql no Supabase para usar as listas.";
+}
+function lstText(ev){
+  var it=listas.filter(function(l){return l.tipo===tipoL});
+  return"*"+(tipoL==="cortesia"?"Lista de cortesias":"Lista de patrocinadores")+"*\n*"+ev.titulo+"*"+(ev.data_evento?" – "+fday(ev.data_evento):"")+"\n\n"+(it.map(function(l,i){return(i+1)+". "+l.nome+(l.obs?" – "+l.obs:"")}).join("\n")||"(lista vazia)")+"\n\nTotal: "+it.length;
+}
+function meuNum(troca){
+  var n=null;try{n=localStorage.getItem("mind_meuwa")}catch(e){}
+  if(!n||troca){var v=prompt("Seu WhatsApp com DDD (só números):",n||"");if(v==null)return"";v=v.replace(/\D/g,"");if(v.length<10)return"";if(v.length<=11)v="55"+v;n=v;try{localStorage.setItem("mind_meuwa",n)}catch(e){}}
+  return n;
+}
+async function copiar(t){try{await navigator.clipboard.writeText(t);alert("Lista copiada!")}catch(e){prompt("Copie a lista:",t)}}
+async function listAct(a,id,b){
+  var ev=events.filter(function(x){return String(x.id)===String(openEv||id)})[0];
+  if(a==="xo"){
+    if(openEv===id){openEv=null;renderEvents();return}
+    openEv=id;tipoL="cortesia";listas=[];renderEvents();await loadListas(id);renderEvents();return;
+  }
+  if(a==="xt"){tipoL=b.getAttribute("data-v");renderEvents();return}
+  if(a==="xa"){
+    var nm=($("ln").value||"").trim();if(nm.length<2)return;
+    var r=await req("landing_listas",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({evento_id:Number(id),tipo:tipoL,nome:nm,obs:($("lo").value||"").trim()||null,ts:Date.now()})});
+    if(r&&r.ok){await loadListas(id);renderEvents();$("ln").focus()}else if(r)$("ee").textContent="Não foi possível salvar. Rode o supabase-setup-5.sql no Supabase.";
+    return;
+  }
+  if(a==="xd"){await req("landing_listas?id=eq."+encodeURIComponent(id),{method:"DELETE"});await loadListas(openEv);renderEvents();return}
+  if(!ev)return;
+  var txt=lstText(ev);
+  if(a==="xp"){copiar(txt);return}
+  if(a==="xn"){meuNum(true);return}
+  if(a==="xs"||a==="xc"){
+    var base="https://wa.me/";
+    if(a==="xs"){var n=meuNum();if(!n)return;base+=n}
+    var url=base+"?text="+encodeURIComponent(txt);
+    if(url.length>3800){alert("Lista grande demais para o link do WhatsApp. Ela será copiada: cole na conversa.");copiar(txt);return}
+    window.open(url,"_blank");
+  }
+}
+$("el").onkeydown=function(e){if(e.key==="Enter"&&(e.target.id==="ln"||e.target.id==="lo")){e.preventDefault();var b=$("el").querySelector("[data-a=xa]");if(b)b.click()}};
 </script></body></html>
