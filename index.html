@@ -306,6 +306,8 @@ var $=function(i){return document.getElementById(i)};
 var editEv=null,openEv=null,tipoL="cortesia",listas=[],orcs=[],leads=[],events=[],feeds=[],authed=false,sub=1,nota=0;
 function esc(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML}
 function escA(s){return esc(s).replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+async function errTxt(r){try{return (await r.clone().text()).slice(0,160)}catch(e){return""}}
+var MSG_LOCAL="Evento salvo, mas o local NÃO foi gravado: falta criar a coluna 'local' no Supabase. Rode o arquivo supabase-local.sql no SQL Editor e tente de novo.";
 function ss(k,v){try{if(v==null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){}}
 function sg(k){try{return sessionStorage.getItem(k)}catch(e){return null}}
 function fdt(ts){return new Date(Number(ts)).toLocaleString("pt-BR")}
@@ -461,8 +463,15 @@ function renderEvents(){
 $("ef").onsubmit=async function(e){
   e.preventDefault();
   var t=$("et").value.trim();if(!t)return;
-  var r=await req("landing_events",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify({titulo:t,local:$("elc").value.trim()||null,data_evento:$("ed").value||null,feito:false,ts:Date.now()})});
-  if(r&&r.ok){$("et").value="";$("elc").value="";$("ed").value="";$("ee").textContent="";load()}else if(r)$("ee").textContent="Não foi possível salvar o evento."
+  var body={titulo:t,local:$("elc").value.trim()||null,data_evento:$("ed").value||null,feito:false,ts:Date.now()},msg="";
+  var r=await req("landing_events",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify(body)});
+  if(r&&!r.ok&&/local/i.test(await errTxt(r))){ // coluna 'local' ainda não existe: salva sem ela e avisa
+    var b2=Object.assign({},body);delete b2.local;
+    r=await req("landing_events",{method:"POST",headers:{Prefer:"return=minimal"},body:JSON.stringify(b2)});
+    if(r&&r.ok)msg=MSG_LOCAL;
+  }
+  if(r&&r.ok){$("et").value="";$("elc").value="";$("ed").value="";await load();$("ee").textContent=msg}
+  else if(r)$("ee").textContent="Não foi possível salvar o evento ("+r.status+" "+await errTxt(r)+")";
 };
 $("el").onclick=async function(e){
   var xb=e.target.closest&&e.target.closest("button[data-a^=x]");if(xb){return listAct(xb.getAttribute("data-a"),xb.getAttribute("data-id"),xb)}
@@ -478,8 +487,10 @@ $("el").onclick=async function(e){
   }else if(a==="ec"){editEv=null;renderEvents()
   }else if(a==="es"){
     var t2=$("ee_t").value.trim();if(!t2){$("ee").textContent="Digite o nome do evento.";return}
-    var r3=await req("landing_events?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({titulo:t2,local:$("ee_l").value.trim()||null,data_evento:$("ee_d").value||null})});
-    if(r3&&r3.ok){editEv=null;$("ee").textContent="";load()}else if(r3)$("ee").textContent="Não foi possível salvar. Confira se o campo de local foi criado no Supabase."
+    var pb={titulo:t2,local:$("ee_l").value.trim()||null,data_evento:$("ee_d").value||null},m3="";
+    var r3=await req("landing_events?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(pb)});
+    if(r3&&!r3.ok&&/local/i.test(await errTxt(r3))){delete pb.local;r3=await req("landing_events?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify(pb)});if(r3&&r3.ok)m3=MSG_LOCAL}
+    if(r3&&r3.ok){editEv=null;await load();$("ee").textContent=m3}else if(r3)$("ee").textContent="Não foi possível salvar ("+r3.status+" "+await errTxt(r3)+")"
   }else if(a==="p"){var e2=events.filter(function(x){return String(x.id)===id})[0];await req("landing_events?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({publico:!(e2&&e2.publico)})});load()}else if(a==="d"&&confirm("Excluir este evento?")){
     await req("landing_events?id=eq."+encodeURIComponent(id),{method:"DELETE"});load();
   }
@@ -608,7 +619,7 @@ function swApi(path,body,pass){
   var o={method:body?"POST":"GET",headers:{}};
   if(body){o.headers["content-type"]="application/json";o.body=JSON.stringify(body)}
   if(pass!=null)o.headers["x-pass"]=pass;
-  return fetch(SORTEIO_API+path,o).then(function(r){return r.json()}).catch(function(){return{e:"Não foi possível falar com o servidor do sorteio."}});
+  return fetch(SORTEIO_API+path,o).then(function(r){return r.json()}).catch(function(){return{e:"Não foi possível falar com o servidor do sorteio. Confira se o worker.js novo foi publicado e se o endereço SORTEIO_API está certo."}});
 }
 function swDraw(){
   $("sw_st").innerHTML=swSteps.map(function(t,i){
