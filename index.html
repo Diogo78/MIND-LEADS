@@ -379,14 +379,14 @@ show(1); // a primeira tela é sempre o Cadastro
 if(sg("auth")==="1"){authed=true;$("lg").classList.add("hide");$("pn").classList.remove("hide")}
 
 function logout(){authed=false;ss("auth",null);ss("tk",null);ss("rt",null);$("pn").classList.add("hide");$("lg").classList.remove("hide")}
-$("so").onclick=function(){logout();forgetAdmin();show(1)};
+$("so").onclick=function(){logout();forgetAdmin();show(1);try{history.replaceState(null,"",location.pathname+location.search)}catch(e){}};
 /* ---------- Admin visível só para o dono ---------- */
+// O botão Admin só aparece com o link #admin (e enquanto a sessão estiver aberta). Nada fica guardado no aparelho.
 function revealAdmin(){$("t3").classList.remove("hide")}
-function rememberAdmin(){try{localStorage.setItem("mind_admin","1")}catch(e){}revealAdmin()}
-function forgetAdmin(){try{localStorage.removeItem("mind_admin")}catch(e){}$("t3").classList.add("hide")}
-function adminKnown(){try{return localStorage.getItem("mind_admin")==="1"}catch(e){return false}}
+function forgetAdmin(){$("t3").classList.add("hide")}
 function adminHash(){if(location.hash==="#admin"){revealAdmin();show(3)}}
-if(adminKnown()||sg("auth")==="1")revealAdmin();
+try{localStorage.removeItem("mind_admin")}catch(e){} // limpa o que a versão anterior guardava
+if(sg("auth")==="1")revealAdmin();
 adminHash();window.addEventListener("hashchange",adminHash);
 
 /* ---------- cadastro (público) ---------- */
@@ -530,7 +530,7 @@ $("fl").onclick=async function(e){
 /* ---------- login ---------- */
 $("lb").onclick=async function(){
   var ok=await tok({email:ADMIN_EMAIL,password:$("pw").value},"password");
-  if(ok){authed=true;ss("auth","1");rememberAdmin();$("lg").classList.add("hide");$("pn").classList.remove("hide");$("le").textContent="";$("pw").value="";load()}
+  if(ok){authed=true;ss("auth","1");revealAdmin();$("lg").classList.add("hide");$("pn").classList.remove("hide");$("le").textContent="";$("pw").value="";load()}
   else $("le").textContent="Senha incorreta.";
 };
 $("pw").onkeydown=function(e){if(e.key==="Enter")$("lb").click()};
