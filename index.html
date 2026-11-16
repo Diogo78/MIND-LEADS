@@ -125,7 +125,7 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
  .ev .st{min-width:44px}
  .ev .et{flex:1 1 calc(100% - 70px);min-width:0}
  .ev .et b{font-size:16px}
- .ev>.del{flex:1 1 auto;white-space:nowrap;text-align:center;font-size:13px;padding:11px 8px;min-height:44px;background:#1b1b1b;border:1px solid var(--bd);border-radius:10px}
+ .ev>.del{flex:1 1 calc(50% - 6px);white-space:nowrap;text-align:center;font-size:13px;padding:11px 8px;min-height:44px;background:#1b1b1b;border:1px solid var(--bd);border-radius:10px}
 }
 @media(max-width:380px){.tabs button{padding:8px 12px;font-size:13px}.stars button{font-size:32px;min-width:42px}}
 </style></head><body>
@@ -303,8 +303,9 @@ var CIDADE="Minas Gerais e região";
 var PARCEIROS=[]; // ex: [{src:"fotos/parceiro1.png",t:"Parceiro"}]
 // ==========================
 var $=function(i){return document.getElementById(i)};
-var openEv=null,tipoL="cortesia",listas=[],orcs=[],leads=[],events=[],feeds=[],authed=false,sub=1,nota=0;
+var editEv=null,openEv=null,tipoL="cortesia",listas=[],orcs=[],leads=[],events=[],feeds=[],authed=false,sub=1,nota=0;
 function esc(s){var d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML}
+function escA(s){return esc(s).replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
 function ss(k,v){try{if(v==null)sessionStorage.removeItem(k);else sessionStorage.setItem(k,v)}catch(e){}}
 function sg(k){try{return sessionStorage.getItem(k)}catch(e){return null}}
 function fdt(ts){return new Date(Number(ts)).toLocaleString("pt-BR")}
@@ -415,7 +416,7 @@ async function load(){
     else if(r3)$("fer").textContent="Não foi possível carregar os feedbacks. Rode o arquivo supabase-setup.sql no Supabase.";
   }
 }
-setInterval(function(){if(authed&&!openEv&&!$("ad").classList.contains("hide"))load()},8000);
+setInterval(function(){if(authed&&!openEv&&!editEv&&!$("ad").classList.contains("hide"))load()},8000);
 $("rf").onclick=load;
 
 /* ---------- admin: leads ---------- */
@@ -441,12 +442,20 @@ $("ex").onclick=function(){
 };
 
 /* ---------- admin: checklist de eventos ---------- */
+function editPanel(x){
+  var id=esc(x.id);
+  return "<div class='lp' style='flex-basis:100%;width:100%;border-top:1px solid var(--bd);padding-top:10px'>"
+  +"<label for='ee_t' style='margin-top:0'>Nome do evento</label><input id='ee_t' maxlength='120' value=\""+escA(x.titulo)+"\">"
+  +"<label for='ee_l'>Local do evento</label><input id='ee_l' maxlength='120' placeholder='Ex: Parque de Exposições, São Gotardo/MG' value=\""+escA(x.local)+"\">"
+  +"<label for='ee_d'>Data</label><input id='ee_d' type='date' value=\""+escA(String(x.data_evento||"").slice(0,10))+"\">"
+  +"<div class='bar' style='margin:12px 0 0'><button class='btn sm' type='button' data-a='es' data-id='"+id+"'>Salvar</button><button class='btn sm ghost' type='button' data-a='ec' data-id='"+id+"'>Cancelar</button></div></div>";
+}
 function renderEvents(){
   var done=events.filter(function(x){return x.feito}).length;
   $("ec").textContent=done+" de "+events.length;
   $("el").innerHTML=events.map(function(x){
     var id=esc(x.id);
-    return "<li class='ev"+(x.feito?" done":"")+"'><button class='st' data-a='t' data-id='"+id+"' aria-label='"+(x.feito?"Marcar como não feito":"Marcar como feito")+"'>"+(x.feito?"✅":"☑️")+"</button><div class='et'><b>"+esc(x.titulo)+"</b>"+(x.local?"<small class='loc'>📍 "+esc(x.local)+"</small>":"")+(x.data_evento?"<small>"+esc(fday(x.data_evento))+"</small>":"")+"</div><button class='del' data-a='p' data-id='"+id+"' style='color:var(--neon)'>"+(x.publico?"Ocultar do site":"Mostrar no site")+"</button><button class='del' data-a='xo' data-id='"+id+"' style='color:var(--neon)'>"+(openEv===String(x.id)?"Fechar listas":"📋 Listas")+"</button><button class='del' data-a='d' data-id='"+id+"'>Excluir</button>"+(openEv===String(x.id)?panel(x):"")+"</li>";
+    return "<li class='ev"+(x.feito?" done":"")+"'><button class='st' data-a='t' data-id='"+id+"' aria-label='"+(x.feito?"Marcar como não feito":"Marcar como feito")+"'>"+(x.feito?"✅":"☑️")+"</button><div class='et'><b>"+esc(x.titulo)+"</b>"+(x.local?"<small class='loc'>📍 "+esc(x.local)+"</small>":"<small class='loc' style='opacity:.55'>📍 Sem local</small>")+(x.data_evento?"<small>"+esc(fday(x.data_evento))+"</small>":"")+"</div><button class='del' data-a='p' data-id='"+id+"' style='color:var(--neon)'>"+(x.publico?"Ocultar do site":"Mostrar no site")+"</button><button class='del' data-a='xo' data-id='"+id+"' style='color:var(--neon)'>"+(openEv===String(x.id)?"Fechar listas":"📋 Listas")+"</button><button class='del' data-a='e' data-id='"+id+"' style='color:var(--neon)'>✏️ Editar</button><button class='del' data-a='d' data-id='"+id+"'>Excluir</button>"+(editEv===String(x.id)?editPanel(x):"")+(openEv===String(x.id)?panel(x):"")+"</li>";
   }).join("")||"<li class='stat'>Nenhum evento ainda. Adicione o primeiro acima.</li>";
 }
 $("ef").onsubmit=async function(e){
@@ -465,6 +474,12 @@ $("el").onclick=async function(e){
     ev.feito=!ev.feito;renderEvents(); // atualiza na hora
     await req("landing_events?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({feito:ev.feito})});
     load();
+  }else if(a==="e"){editEv=(editEv===id?null:id);renderEvents()
+  }else if(a==="ec"){editEv=null;renderEvents()
+  }else if(a==="es"){
+    var t2=$("ee_t").value.trim();if(!t2){$("ee").textContent="Digite o nome do evento.";return}
+    var r3=await req("landing_events?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({titulo:t2,local:$("ee_l").value.trim()||null,data_evento:$("ee_d").value||null})});
+    if(r3&&r3.ok){editEv=null;$("ee").textContent="";load()}else if(r3)$("ee").textContent="Não foi possível salvar. Confira se o campo de local foi criado no Supabase."
   }else if(a==="p"){var e2=events.filter(function(x){return String(x.id)===id})[0];await req("landing_events?id=eq."+encodeURIComponent(id),{method:"PATCH",headers:{Prefer:"return=minimal"},body:JSON.stringify({publico:!(e2&&e2.publico)})});load()}else if(a==="d"&&confirm("Excluir este evento?")){
     await req("landing_events?id=eq."+encodeURIComponent(id),{method:"DELETE"});load();
   }
