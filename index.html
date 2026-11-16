@@ -108,6 +108,15 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
  td::before{content:attr(data-label);color:var(--mut);font-size:12px;text-transform:uppercase;text-align:left;flex-shrink:0}
  td[colspan]::before{content:none}
  .ev{padding:8px 10px}
+ /* admin > Eventos no celular: formulário em coluna */
+ #ef input{flex:1 1 100%;min-width:0}
+ #ef input[type=date]{max-width:none!important}
+ #ef .btn.sm{flex:1 1 100%}
+ /* linha do evento: checkbox + nome/data em cima, botões embaixo */
+ .ev .st{min-width:44px}
+ .ev .et{flex:1 1 calc(100% - 70px);min-width:0}
+ .ev .et b{font-size:16px}
+ .ev>.del{flex:1 1 auto;white-space:nowrap;text-align:center;font-size:13px;padding:11px 8px;min-height:44px;background:#1b1b1b;border:1px solid var(--bd);border-radius:10px}
 }
 @media(max-width:380px){.tabs button{padding:8px 12px;font-size:13px}.stars button{font-size:32px;min-width:42px}}
 </style></head><body>
