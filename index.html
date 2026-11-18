@@ -109,6 +109,8 @@ footer{text-align:center;color:var(--mut);font-size:12px;padding:24px 0}
 .toast button{position:absolute;top:6px;right:8px;width:auto;min-height:0;padding:2px 6px;background:none;border:0;color:var(--mut);font-size:22px;line-height:1;cursor:pointer}
 @media(min-width:641px){.toast{top:112px;padding:14px 40px 14px 16px}}
 @keyframes toastIn{from{opacity:0;transform:translateY(-12px) scale(.96)}to{opacity:1;transform:none}}
+.rgl,.pvl{cursor:pointer}
+.swinfo{font-weight:700;color:var(--neon);line-height:1.6}
 .swalert{background:rgba(255,70,70,.08);border:1px solid rgba(255,90,90,.55);border-radius:14px;padding:12px 14px;margin:10px 0;font-size:14px;line-height:1.45}
 .swalert b{color:#ff6b6b}
 .sst{background:#0d0d0d;border:1px solid var(--bd);border-radius:14px;padding:14px;margin:10px 0;font-size:15px}
@@ -200,6 +202,7 @@ a.btn{display:block;text-align:center;text-decoration:none}
 <h2 class="sec">Próximos <span>Eventos</span></h2><div class="agenda" id="gal"><div class="agh"><i>📅</i><div><h3 class="sec"><span>Agenda</span></h3><p class="agsub">Toque no evento para ver detalhes e ingressos</p></div></div><div class="list" id="prol"></div></div>
 <div id="dep" class="hide"><h2 class="sec">O que dizem <span>da MIND</span></h2><div class="list" id="depl" style="padding:14px 0"></div></div>
 <div id="par" class="hide"><h2 class="sec">Nossos <span>parceiros</span></h2><div class="gal" id="parl"></div></div>
+<div id="port" class="hide"><h2 class="sec">Eventos <span>realizados</span></h2><div class="gal" id="portg"></div></div>
 <div class="faq" id="faq" style="padding:10px 0"><h2 class="sec">Perguntas <span>frequentes</span></h2><div style="padding-top:14px">
 <details><summary>Quais serviços a MIND oferece?</summary><p>Roadie, backstage, suporte ao evento, artistas, organização de eventos e produções. Você pode contratar um serviço isolado ou o evento completo.</p></details>
 <details><summary>Atendem a minha cidade?</summary><p>Atuamos em Minas Gerais e região. Informe a cidade no pedido de orçamento e confirmamos a disponibilidade.</p></details>
@@ -271,12 +274,14 @@ a.btn{display:block;text-align:center;text-decoration:none}
 <div class="hero">
 <h1>🚨 <span>Sorteio</span> MIND</h1>
 <p class="sub">Cumpra os passos e concorra.</p>
+<p class="sub swinfo" id="sw_info"></p>
 <div class="card" id="swc">
 <label for="sw_u">Seu @ do Instagram</label><input id="sw_u" placeholder="@seuinstagram" autocapitalize="none" autocorrect="off" autocomplete="off">
 <label for="sw_z">WhatsApp com DDD</label><input id="sw_z" type="tel" inputmode="tel" placeholder="(34) 99999-9999" autocomplete="tel">
-<label class="chk"><input type="checkbox" id="sw_a"><span>Tenho 18 anos ou mais e aceito o regulamento e a <a class="pvl">Política de Privacidade</a> (LGPD).</span></label>
+<label class="chk"><input type="checkbox" id="sw_a"><span>Tenho 18 anos ou mais e aceito o <a class="rgl" tabindex="0" role="button">regulamento</a> e a <a class="pvl">Política de Privacidade</a> (LGPD).</span></label>
 <div id="sw_st"></div>
 <div class="swalert">🚨 <b>Siga todas as regras!</b> É obrigatório fazer o cadastro para validar o sorteio. Proibido marcar famosos ou perfis fake nos comentários.</div>
+<div id="sw_ts" style="margin:12px 0;display:flex;justify-content:center"></div>
 <button class="btn" id="sw_fin" type="button" disabled>CONCLUIR CADASTRO</button>
 <div class="err" id="sw_msg"></div>
 </div>
@@ -289,7 +294,7 @@ a.btn{display:block;text-align:center;text-decoration:none}
 <button class="btn" id="lb" type="button">ENTRAR</button><div class="err" id="le"></div>
 </div>
 <div id="pn" class="hide">
-<div class="bar"><div class="subtabs"><button id="s1" class="on"><i>👥</i><span>Leads</span></button><button id="s2"><i>🎫</i><span>Eventos</span></button><button id="s3"><i>💬</i><span>Feedbacks</span></button><button id="s4"><i>🧾</i><span>Orçamentos</span></button><button id="s5"><i>🎁</i><span>Sorteio</span></button></div><div style="flex:1"></div><button class="btn sm ghost" id="so">Sair</button></div>
+<div class="bar"><div class="subtabs"><button id="s1" class="on"><i>👥</i><span>Leads</span></button><button id="s2"><i>🎫</i><span>Eventos</span></button><button id="s3"><i>💬</i><span>Feedbacks</span></button><button id="s4"><i>🧾</i><span>Orçamentos</span></button><button id="s5"><i>🎁</i><span>Sorteio</span></button><button id="s6"><i>🔒</i><span>Segurança</span></button></div><div style="flex:1"></div><button class="btn sm ghost" id="so">Sair</button></div>
 
 <div id="pl">
 <div class="bar"><div class="stat"><b id="ct">0</b> leads</div><div style="flex:1"></div>
@@ -311,7 +316,11 @@ a.btn{display:block;text-align:center;text-decoration:none}
 <div class="sx">
 <label for="sx_ps">Senha do sorteio (a mesma ADMIN_PASS do Worker)</label><input id="sx_ps" type="password" autocomplete="off" placeholder="Senha do sorteio">
 <label for="sx_pt">Link do post do sorteio</label><input id="sx_pt" placeholder="https://www.instagram.com/p/..." autocapitalize="none">
-<button class="btn sm ghost" id="sx_save" type="button" style="margin-top:10px">Salvar link do post</button>
+<div class="bar" style="margin:10px 0 0"><button class="btn sm ghost" id="sx_paste" type="button">📋 Colar link</button><button class="btn sm" id="sx_save" type="button">Salvar link do post</button></div>
+<label for="sx_nm">Nome do sorteio</label><input id="sx_nm" placeholder="sorteio #02" maxlength="60">
+<label for="sx_pr">Prêmio (aparece no regulamento e na tela do sorteio)</label><input id="sx_pr" placeholder="Ex.: 2 ingressos + camarote" maxlength="200">
+<label for="sx_en">Encerramento dos cadastros (horário de Brasília)</label><input id="sx_en" type="datetime-local">
+<button class="btn sm" id="sx_dados" type="button" style="margin-top:10px">Salvar dados do sorteio</button>
 <button class="btn" id="sx_draw" type="button">BUSCAR COMENTÁRIOS E SORTEAR</button>
 <label for="sx_tx">Ou cole aqui os comentários (modo manual)</label><textarea id="sx_tx" placeholder="Cole os comentários copiados do Instagram"></textarea>
 <button class="btn sm ghost" id="sx_man" type="button">Sortear com comentários colados</button>
@@ -324,6 +333,14 @@ a.btn{display:block;text-align:center;text-decoration:none}
 <div id="sx_out"></div>
 <div class="bar"><button class="btn sm ghost" id="sx_reset" type="button">Novo sorteio (limpar cadastros)</button></div>
 </div>
+<div id="pz" class="hide">
+<div class="sx">
+<h3 style="margin:0 0 6px;color:var(--neon)">🔒 Segurança do site</h3>
+<p class="stat" style="margin:0 0 10px">Confere se o público consegue ler seus dados (leads, orçamentos, listas e feedbacks). Versão do site publicada: <b id="sz_v"></b></p>
+<button class="btn" id="sz_run" type="button">VERIFICAR AGORA</button>
+<div class="list" id="sz_out" style="margin-top:12px"></div>
+</div>
+</div>
 <div id="pf" class="hide">
 <div class="bar"><div class="stat">Média <b id="fa">–</b> <span class="st5" id="fas"></span> &nbsp;·&nbsp; <b id="fc2">0</b> feedbacks</div></div>
 <div class="err" id="fer"></div>
@@ -332,6 +349,7 @@ a.btn{display:block;text-align:center;text-decoration:none}
 </div></section>
 <div class="ck hide" id="ck"><span>Usamos cookies de medição (Meta e Google) para melhorar o site e nossos anúncios. <a class="pvl" style="color:var(--neon);cursor:pointer;text-decoration:underline">Saiba mais</a></span><div><button class="btn sm ghost" id="ckn" type="button">Recusar</button><button class="btn sm" id="cky" type="button">Aceitar</button></div></div>
 <div class="ov hide" id="evd"><div class="card evd" id="evdc" role="dialog" aria-modal="true" aria-label="Detalhes do evento"></div></div>
+<div class="ov hide" id="rg"><div class="card" id="rgc"></div></div>
 <div class="ov hide" id="pv"><div class="card"><h3 style="margin:0 0 8px;color:var(--neon)">Política de Privacidade</h3>
 <p><b>Quem somos:</b> MIND Entretenimento (Instagram @mindentretenimento). <b>Dados coletados:</b> nome, e-mail, WhatsApp, Instagram e as informações do seu pedido de orçamento ou feedback.</p>
 <p><b>Para que usamos:</b> responder orçamentos, enviar novidades e eventos da MIND e melhorar nossos serviços. Não vendemos seus dados.</p>
@@ -350,6 +368,9 @@ var ADMIN_EMAIL="admin@mind.com"; // a senha é definida no Supabase (Authentica
 var SORTEIO_API="https://sorteio.mind-215.workers.dev"; // Worker do sorteio (guarda o token do Instagram)
 var WHATSAPP=""; // ex: "5534999999999" (55 + DDD + número). Vazio = botão oculto
 var PORTFOLIO=[]; // ex: [{src:"fotos/evento1.jpg",t:"Nome do evento"}]
+var SORTEIO_POST="https://www.instagram.com/p/Df5I5N7Sxb_/"; // link padrão do "Ir ao post" (o que você salvar em Admin > Sorteio tem prioridade)
+var SITE_BUILD="2026-11-18 · v9"; // muda a cada versão: serve para conferir se o site novo já foi publicado
+var TURNSTILE_SITEKEY=""; // chave PÚBLICA do Cloudflare Turnstile (opcional; vazio = sem verificação)
 var META_PIXEL=""; // ID do Pixel do Meta (opcional)
 var GA_ID=""; // ex: "G-XXXXXXXXXX" (Google Analytics, opcional)
 var EMAIL=""; // e-mail de contato (opcional)
@@ -418,11 +439,11 @@ function show(t){
 }
 function setSub(s){
   sub=s;
-  ["pl","pe","pf","pq","px"].forEach(function(id,i){$(id).classList.toggle("hide",s!=i+1);$("s"+(i+1)).classList.toggle("on",s==i+1)});
+  ["pl","pe","pf","pq","px","pz"].forEach(function(id,i){$(id).classList.toggle("hide",s!=i+1);$("s"+(i+1)).classList.toggle("on",s==i+1)});
   load();
 }
-$("t1").onclick=function(){show(1)};$("t2").onclick=function(){show(2)};$("t3").onclick=function(){show(3)};$("t4").onclick=function(){show(4)};
-$("s1").onclick=function(){setSub(1)};$("s2").onclick=function(){setSub(2)};$("s3").onclick=function(){setSub(3)};$("s4").onclick=function(){setSub(4)};$("s5").onclick=function(){setSub(5)};
+$("t1").onclick=function(){show(1)};$("t2").onclick=function(){show(2)};$("t3").onclick=function(){show(3)};$("t4").onclick=function(){show(4);swTsInit()};
+$("s1").onclick=function(){setSub(1)};$("s2").onclick=function(){setSub(2)};$("s3").onclick=function(){setSub(3)};$("s4").onclick=function(){setSub(4)};$("s5").onclick=function(){setSub(5)};$("s6").onclick=function(){setSub(6)};
 $("go").onclick=function(){$("cad").scrollIntoView({behavior:"smooth",block:"start"})};
 show(1); // a primeira tela é sempre o Cadastro
 if(sg("auth")==="1"){authed=true;$("lg").classList.add("hide");$("pn").classList.remove("hide")}
@@ -655,6 +676,7 @@ $("prol").onclick=function(e){var b=e.target.closest&&e.target.closest("button[d
 agRender();
 $("evd").onclick=function(e){if(e.target===this||(e.target.closest&&e.target.closest("[data-close]")))agClose()};
 document.addEventListener("keydown",function(e){if(e.key==="Escape")agClose()});
+if(PORTFOLIO.length){$("port").classList.remove("hide");$("portg").innerHTML=PORTFOLIO.map(function(x){return"<img loading='lazy' src='"+escA(x.src)+"' alt='"+escA(x.t||"Evento MIND")+"'>"}).join("")}
 (async function(){try{
   var base=SB_URL+"/rest/v1/landing_events?publico=eq.true&feito=eq.false&order=data_evento.asc.nullslast&select=",h={headers:{apikey:SB_KEY}};
   var r=await fetch(base+"id,titulo,data_evento,local,cidade,descricao,ingresso_url",h);
@@ -733,14 +755,14 @@ function swApi(path,body,pass){
 }
 function swDraw(){
   $("sw_st").innerHTML=swSteps.map(function(t,i){
-    return "<div class='sst'>"+(i+1)+". "+esc(t)+"<br><a href='"+esc(swCfg.post||"#")+"' target='_blank' rel='noopener'>Ir ao post</a><button class='btn' type='button' id='swb"+i+"' data-i='"+i+"'>Já fiz</button></div>"
+    return "<div class='sst'>"+(i+1)+". "+esc(t)+"<br><a href='"+esc(swCfg.post||SORTEIO_POST||"#")+"' target='_blank' rel='noopener'>Ir ao post</a><button class='btn' type='button' id='swb"+i+"' data-i='"+i+"'>Já fiz</button></div>"
   }).join("");
 }
-swApi("/api/cfg").then(function(c){swCfg=c||{};swDraw()});
+swApi("/api/cfg").then(function(c){swCfg=c||{};swDraw();swInfo();sxFill()});
 $("sw_st").onclick=function(e){
   var b=e.target.closest&&e.target.closest("button[data-i]");if(!b||b.disabled)return;
   var i=b.getAttribute("data-i"),n=15;b.disabled=true;b.textContent="Aguarde "+n+"s";
-  var t=setInterval(function(){n--;b.textContent="Aguarde "+n+"s";if(n<=0){clearInterval(t);b.textContent="Feito ✓";swDone[i]=1;$("sw_fin").disabled=Object.keys(swDone).length<swSteps.length}},1000);
+  var t=setInterval(function(){n--;b.textContent="Aguarde "+n+"s";if(n<=0){clearInterval(t);b.textContent="Feito ✓";swDone[i]=1;$("sw_fin").disabled=swClosed()||Object.keys(swDone).length<swSteps.length}},1000);
 };
 var swToastT=null;
 function swToast(html){
@@ -750,19 +772,103 @@ function swToast(html){
 $("toastX").onclick=function(){clearTimeout(swToastT);$("toast").classList.add("hide")};
 $("sw_fin").onclick=async function(){
   var m=$("sw_msg");m.style.color="";m.textContent="";
-  var r=await swApi("/api/register",{user:$("sw_u").value,zap:$("sw_z").value,adult:$("sw_a").checked});
+  if(swClosed()){m.textContent="Os cadastros deste sorteio já foram encerrados.";return}
+  if(TURNSTILE_SITEKEY&&!swTok){m.textContent="Aguarde a verificação de segurança terminar (ou atualize a página) e toque de novo.";return}
+  var r=await swApi("/api/register",{user:$("sw_u").value,zap:$("sw_z").value,adult:$("sw_a").checked,cf:swTok});
+  if(window.turnstile&&swTsId!==null){try{turnstile.reset(swTsId)}catch(e){}}swTok="";
   if(r.ok){
     swDone={};$("sw_u").value="";$("sw_z").value="";$("sw_a").checked=false;$("sw_fin").disabled=true;swDraw(); // deixa o sorteio zerado
     show(1);window.scrollTo({top:0,behavior:"smooth"});
-    swToast("<b>Parabéns</b> você está participando do nosso sorteio #02 Boa Sorte 🍀");
+    swToast("<b>Parabéns</b> você está participando do nosso "+esc(swCfg.nome||"sorteio")+" Boa Sorte 🍀");
   }else m.textContent=r.e||"Não foi possível concluir o cadastro.";
 };
+/* regulamento, encerramento e verificação */
+var swTok="",swTsId=null,swTsLoading=false;
+function swTsInit(){
+  if(!TURNSTILE_SITEKEY||swTsId!==null||swTsLoading)return;
+  swTsLoading=true;
+  var sc=document.createElement("script");sc.src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";sc.async=true;
+  sc.onload=function(){try{swTsId=turnstile.render("#sw_ts",{sitekey:TURNSTILE_SITEKEY,theme:"dark",callback:function(t){swTok=t},"expired-callback":function(){swTok=""},"error-callback":function(){swTok=""}})}catch(e){swTsLoading=false}};
+  sc.onerror=function(){swTsLoading=false};
+  document.head.appendChild(sc);
+}
+function swClosed(){return !!(swCfg.encerra&&Date.now()>Date.parse(swCfg.encerra))}
+function fmtEnc(iso){var d=new Date(iso);return isNaN(d)?"":d.toLocaleString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit",timeZone:"America/Sao_Paulo"}).replace(", "," às ")}
+var swCdT=null;
+function swPad(n){return String(n).padStart(2,"0")}
+function fmtCd(ms){
+  var t=Math.floor(ms/1000),d=Math.floor(t/86400),h=Math.floor(t%86400/3600),m=Math.floor(t%3600/60),x=t%60;
+  if(d>0)return d+"d "+swPad(h)+"h "+swPad(m)+"min";
+  if(h>0)return h+"h "+swPad(m)+"min "+swPad(x)+"s";
+  if(m>0)return m+"min "+swPad(x)+"s";
+  return x+"s";
+}
+function swTick(){
+  var el=$("sw_cd");if(!el||!swCfg.encerra)return;
+  var ms=Date.parse(swCfg.encerra)-Date.now();
+  if(ms<=0){clearInterval(swCdT);swCdT=null;swInfo();return}
+  el.textContent="⏳ Faltam "+fmtCd(ms);
+}
+function swInfo(){
+  var a=[];
+  if(swCfg.premio)a.push("🎁 Prêmio: "+esc(swCfg.premio));
+  if(swCfg.encerra){
+    if(swClosed())a.push("⛔ Cadastros encerrados");
+    else a.push("⏰ Cadastros até "+esc(fmtEnc(swCfg.encerra))+"<br><span id='sw_cd'></span>");
+  }
+  $("sw_info").innerHTML=a.join("<br>");
+  clearInterval(swCdT);swCdT=null;
+  if(swCfg.encerra&&!swClosed()){swTick();swCdT=setInterval(swTick,1000)}
+  $("sw_fin").disabled=swClosed()||Object.keys(swDone).length<swSteps.length;
+}
+function rgOpen(){
+  var c=swCfg||{},nome=c.nome||"sorteio",enc=c.encerra?fmtEnc(c.encerra):"";
+  $("rgc").innerHTML="<h3 style='margin:0 0 8px;color:var(--neon)'>Regulamento — "+esc(nome)+"</h3>"
+  +"<p><b>1. Organizador:</b> MIND Entretenimento (Instagram @mindentretenimento).</p>"
+  +"<p><b>2. Quem pode participar:</b> pessoas com 18 anos ou mais, com perfil real e público no Instagram. É permitida 1 participação por pessoa (1 perfil e 1 número de WhatsApp). Perfis falsos e a equipe organizadora não podem participar.</p>"
+  +"<p><b>3. Como participar:</b> (a) compartilhar o post do sorteio nos stories marcando @mindentretenimento; (b) enviar o post para 5 amigos que não seguem @mindentretenimento; (c) marcar 3 pessoas nos comentários do post; (d) fazer o cadastro neste site. O cadastro é obrigatório para validar a participação. É proibido marcar famosos ou perfis fake nos comentários.</p>"
+  +"<p><b>4. Período:</b> "+(enc?"cadastros até "+esc(enc)+" (horário de Brasília).":"até o encerramento informado no post do sorteio.")+"</p>"
+  +"<p><b>5. Prêmio:</b> "+(c.premio?esc(c.premio)+".":"conforme divulgado no post do sorteio.")+" O prêmio é pessoal, intransferível e não pode ser trocado por dinheiro.</p>"
+  +"<p><b>6. Apuração:</b> o sorteio é feito por sistema próprio da MIND, entre os cadastros que cumpriram todos os passos. São sorteados 1 ganhador e suplentes. Quem descumprir as regras é desclassificado e outro participante é sorteado.</p>"
+  +"<p><b>7. Contato com o ganhador:</b> pelo WhatsApp cadastrado e/ou pelo Instagram. Se o ganhador não responder no prazo informado no contato, será chamado o suplente.</p>"
+  +"<p><b>8. Dados pessoais (LGPD):</b> coletamos seu @ do Instagram e WhatsApp apenas para validar a participação, realizar o sorteio e avisar o ganhador. Os dados são apagados após o encerramento do sorteio. Para pedir acesso ou exclusão, envie uma mensagem para @mindentretenimento. Veja também a <a class='pvl2' style='cursor:pointer'>Política de Privacidade</a>.</p>"
+  +"<p><b>9. Instagram:</b> este sorteio não é patrocinado, endossado ou administrado pelo Instagram/Meta.</p>"
+  +"<p><b>10. Disposições gerais:</b> ao se cadastrar, você aceita este regulamento. Casos omissos serão decididos pela organização.</p>"
+  +"<button class='btn' type='button' data-rgx='1'>FECHAR</button>";
+  var l=$("rgc").querySelector(".pvl2");if(l)l.onclick=function(){$("rg").classList.add("hide");$("pv").classList.remove("hide")};
+  $("rg").classList.remove("hide");$("rg").scrollTop=0;
+}
+document.querySelectorAll(".rgl").forEach(function(a){a.onclick=rgOpen;a.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){e.preventDefault();rgOpen()}}});
+$("rg").onclick=function(e){if(e.target===this||(e.target.closest&&e.target.closest("[data-rgx]")))this.classList.add("hide")};
+document.addEventListener("keydown",function(e){if(e.key==="Escape")$("rg").classList.add("hide")});
+function toLocalInput(iso){if(!iso)return"";var d=new Date(iso);if(isNaN(d))return"";var p=function(n){return String(n).padStart(2,"0")};return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+"T"+p(d.getHours())+":"+p(d.getMinutes())}
+function sxFill(){
+  if($("sx_pt")&&!$("sx_pt").value)$("sx_pt").value=swCfg.post||SORTEIO_POST||"";
+  if($("sx_nm")&&!$("sx_nm").value)$("sx_nm").value=swCfg.nome||"";
+  if($("sx_pr")&&!$("sx_pr").value)$("sx_pr").value=swCfg.premio||"";
+  if($("sx_en")&&!$("sx_en").value)$("sx_en").value=toLocalInput(swCfg.encerra);
+}
 /* admin do sorteio */
 function sxPass(){return $("sx_ps").value}
+var IG_POST_RE=/^https?:\/\/(www\.)?instagram\.com\/(p|reel|tv)\/[^\/?#\s]+/i;
+$("sx_paste").onclick=async function(){
+  try{var t=(await navigator.clipboard.readText()||"").trim();if(!t){$("sx_out").textContent="Nada copiado ainda. Copie o link do post no Instagram e toque de novo.";return}$("sx_pt").value=t;$("sx_out").textContent="Link colado. Toque em Salvar link do post."}
+  catch(e){$("sx_out").textContent="Não consegui acessar o que você copiou. Toque no campo e cole manualmente."}
+};
 $("sx_save").onclick=async function(){
-  var r=await swApi("/api/admin/cfg",{post:$("sx_pt").value},sxPass());
-  $("sx_out").textContent=r.ok?"Link salvo.":(r.e||"Erro ao salvar.");
-  if(r.ok)swCfg.post=$("sx_pt").value,swDraw();
+  var v=$("sx_pt").value.trim();
+  if(!IG_POST_RE.test(v)){$("sx_out").textContent="Cole o link completo de um post do Instagram. Ex.: https://www.instagram.com/p/XXXXXXXX/";return}
+  var r=await swApi("/api/admin/cfg",{post:v},sxPass());
+  if(r.ok){swCfg.post=v;swDraw();$("sx_pt").value=v;$("sx_out").innerHTML="Link salvo ✓ A aba Sorteio já usa o novo link. <a style='color:var(--neon)' target='_blank' rel='noopener noreferrer' href='"+escA(v)+"'>Abrir o post</a>"}
+  else $("sx_out").textContent=r.e||"Erro ao salvar.";
+};
+$("sx_dados").onclick=async function(){
+  var en=$("sx_en").value,iso="";
+  if(en){var d=new Date(en);if(isNaN(d)){$("sx_out").textContent="Data de encerramento inválida.";return}iso=d.toISOString()}
+  var nm=$("sx_nm").value.trim(),pr=$("sx_pr").value.trim();
+  var r=await swApi("/api/admin/cfg",{nome:nm,premio:pr,encerra:iso},sxPass());
+  if(r.ok){swCfg.nome=nm;swCfg.premio=pr;swCfg.encerra=iso;swInfo();$("sx_out").textContent="Dados do sorteio salvos ✓ O regulamento e a tela do sorteio já usam essas informações."}
+  else $("sx_out").textContent=r.e||"Erro ao salvar.";
 };
 async function sxSortear(manual){
   $("sx_out").textContent="Buscando comentários...";
@@ -827,5 +933,38 @@ $("sx_csv").onclick=function(){
   var rows=[["Data","Instagram (sem @)","WhatsApp"]].concat(sxP.map(function(x){return [fdt(x.t),x.user,x.zap]}));
   var csv="\ufeff"+rows.map(function(r){return r.map(sxCell).join(",")}).join("\r\n");
   var a=document.createElement("a");a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8"}));a.download="sorteio-cadastrados.csv";document.body.appendChild(a);a.click();a.remove();
+};
+
+/* ---------- verificação de segurança (Admin > Segurança) ---------- */
+var SEC_TABLES=[
+  {t:"landing_leads",nome:"Leads (Cadastro)",f:""},
+  {t:"landing_orcamentos",nome:"Orçamentos",f:""},
+  {t:"landing_listas",nome:"Listas de acesso",f:""},
+  {t:"landing_feedbacks",nome:"Feedbacks (não publicados)",f:"publicado=eq.false"},
+  {t:"landing_events",nome:"Eventos (não públicos)",f:"publico=eq.false"}
+];
+$("sz_v").textContent=SITE_BUILD;
+function szRow(ic,nome,msg){return "<div class='sxp'><div class='et'><b>"+ic+" "+esc(nome)+"</b><small>"+esc(msg)+"</small></div></div>"}
+$("sz_run").onclick=async function(){
+  var out=$("sz_out"),rows=[],bad=0;out.innerHTML="<div class='stat'>Verificando...</div>";$("sz_run").disabled=true;
+  try{
+    for(var i=0;i<SEC_TABLES.length;i++){
+      var T=SEC_TABLES[i],q=T.t+"?select=*&limit=1"+(T.f?"&"+T.f:"");
+      var ra=await req(q,{headers:{Prefer:"count=exact"}});
+      if(!ra){out.innerHTML="";return} // sessão expirou
+      var n=null;if(ra.ok){n=parseInt((ra.headers.get("content-range")||"").split("/")[1],10);if(isNaN(n))n=null}
+      var anon=0;try{var rp=await fetch(SB_URL+"/rest/v1/"+q,{headers:{apikey:SB_KEY}});if(rp.ok){var j=await rp.json();anon=Array.isArray(j)?j.length:0}}catch(e){}
+      if(anon>0){bad++;rows.push(szRow("🔴",T.nome,"VAZANDO: qualquer pessoa consegue ler estes dados sem login."))}
+      else if(n===0)rows.push(szRow("⚪",T.nome,"Sem dados para testar. Cadastre um item de teste e verifique de novo."));
+      else if(n===null)rows.push(szRow("⚪",T.nome,"Não consegui confirmar. Verifique de novo."));
+      else rows.push(szRow("🟢",T.nome,"Protegido: você vê "+n+(T.f?" (filtrado)":"")+" e o público não vê nada."));
+    }
+    // o público não pode criar eventos
+    var ins=await fetch(SB_URL+"/rest/v1/landing_events",{method:"POST",headers:{apikey:SB_KEY,"content-type":"application/json",Prefer:"return=minimal"},body:JSON.stringify({titulo:"__teste_seguranca__",feito:true,publico:false,ts:Date.now()})}).catch(function(){return null});
+    if(ins&&ins.ok){bad++;await req("landing_events?titulo=eq.__teste_seguranca__",{method:"DELETE"});rows.push(szRow("🔴","Criar eventos","VAZANDO: qualquer pessoa consegue criar eventos."))}
+    else rows.push(szRow("🟢","Criar eventos","Protegido: o público não consegue criar eventos."));
+    rows.push("<div class='sx' style='margin:0'>"+(bad?"⚠️ <b>Atenção:</b> rode o arquivo <b>supabase-seguranca.sql</b> no SQL Editor do Supabase e verifique de novo.":"✅ <b>Tudo certo.</b> O público só consegue enviar formulários e ver o que você marcou como público.")+"</div>");
+    out.innerHTML=rows.join("");
+  }finally{$("sz_run").disabled=false}
 };
 </script></body></html>
